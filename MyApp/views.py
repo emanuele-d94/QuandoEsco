@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -87,6 +87,8 @@ def calcola_uscita(request):
     messaggio_success = None
     messaggio_danger = None
     messaggio_warning = None
+    messaggio_save_success = None
+    messaggio_save_warning = None
     scroll_to_bottom = False
 
     if request.method == 'POST':
@@ -147,6 +149,31 @@ def calcola_uscita(request):
             turno.minuti_pausa = minuti_pausa
             turno.save()
 
+            # Creo e salvo la giornata se non esiste
+
+            giornata = Giornata.objects.filter(user=user,data=data_ingresso).first()
+            if giornata:
+                messaggio_save_warning = f"Giornata {giornata.data.strftime('%d-%m-%Y')} già presente nel Registro."
+            else:
+                giornata = Giornata()
+                giornata.user = request.user
+                giornata.data = data_ingresso
+                print(giornata.data)
+                giornata.ingresso = time(
+                    hour=data_ingresso.hour,
+                    minute=data_ingresso.minute
+                )
+                giornata.uscita = time(
+                    hour=data_uscita.hour,
+                    minute=data_uscita.minute
+                )
+                print(giornata)
+                giornata.ore_lavorate = durata_turno_ore
+                giornata.minuti_lavorati = durata_turno_minuti
+                giornata.minuti_pausa = minuti_pausa
+                giornata.save()
+                messaggio_save_success = f"Giornata {giornata.data.strftime('%d-%m-%Y')} salvata nel Registro!"
+
     else:
         print('Form non popolato')
         form = Ingresso(initial=initial_data)
@@ -159,6 +186,8 @@ def calcola_uscita(request):
                             'messaggio_warning':messaggio_warning,
                             'messaggio_danger': messaggio_danger,
                             'messaggio_success': messaggio_success,
+                            'messaggio_save_success': messaggio_save_success,
+                            'messaggio_save_warning': messaggio_save_warning,
                             'scroll_to_bottom': scroll_to_bottom,  # Variabile per trigger dello scroll
                     })
 

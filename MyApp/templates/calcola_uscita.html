@@ -42,7 +42,7 @@
             <div id="fondoPagina">
             {% if uscita %}
                 <h2 class="text-center mt-4">Uscita:</h2>
-                <p class="text-center">Uscita: {{ uscita|date:"d/m/Y H:i" }}</p>
+                <h3 class="text-center">Uscita: {{ uscita|date:"d/m/Y H:i" }}</h3>
             {% endif %}
 
             {% if messaggio_info %}
@@ -56,6 +56,13 @@
             {% endif %}
             {% if messaggio_success %}
                 <p class="text-center alert alert-success"><b>{{ messaggio_success }}</b></p>
+            {% endif %}
+
+            {% if messaggio_save_success %}
+                <p class="text-center alert alert-success"><b>{{ messaggio_save_success }}</b></p>
+            {% endif %}
+            {% if messaggio_save_warning %}
+                <p class="text-center alert alert-warning"><b>{{ messaggio_save_warning }}</b></p>
             {% endif %}
             </div>
 
