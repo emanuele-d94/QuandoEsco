@@ -7,6 +7,9 @@ Calcola il monte ore mensile lavorato
 L'app è disponibile al link: https://midoriuser.eu.pythonanywhere.com/quandoesco/
 
 Tecnologie:
+
 Django
+
 HTML/CSS/Javascript/Bootstrap
+
 MySql
